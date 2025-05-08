@@ -1,0 +1,66 @@
+services:
+  backend_prod:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres_prod
+    networks:
+      - gonext_network_prod
+
+  postgres_prod:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=gonext
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    networks:
+      - gonext_network_prod
+
+  frontend_prod:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres_prod
+    networks:
+      - gonext_network_prod
+
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80' # Public HTTP Port
+      - '443:443' # Public HTTPS Port
+      - '81:81' # Admin Web Port
+    environment:
+      # Postgres parameters:
+      DB_POSTGRES_HOST: 'postgres_prod'
+      DB_POSTGRES_PORT: '5432'
+      DB_POSTGRES_USER: 'postgres'
+      DB_POSTGRES_PASSWORD: 'postgres'
+      DB_POSTGRES_NAME: 'gonext'
+      INITIAL_ADMIN_EMAIL: hugo@hugo.com
+      INITIAL_ADMIN_PASSWORD: hugo123
+    volumes:
+      - ./nginx/data:/data
+      - ./nginx/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - postgres_prod
+    networks:
+      - gonext_network_prod
+
+volumes:
+  postgres_data_prod:
+
+networks:
+  gonext_network_prod:
+    driver: bridge
