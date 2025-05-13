@@ -2,8 +2,15 @@ package repositories
 
 import (
 	"GoNext/base/ent"
+	"GoNext/base/ent/user"
 	"GoNext/base/internal/core/domain"
 	"GoNext/base/internal/core/ports"
+	"context"
+	"fmt"
+	"log"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 type UserRepository struct {
@@ -16,16 +23,45 @@ func NewUserRepository(client *ent.Client) ports.UserRepository {
 	}
 }
 
+func (r *UserRepository) toDomainUser(entUser *ent.User) *domain.User {
+	if entUser == nil {
+		return nil
+	}
+
+	return &domain.User{
+		Id: entUser.ID.String(),
+		Email: entUser.Email,
+		CreatedAt: entUser.CreatedAt,
+		UpdatedAt: entUser.CreatedAt,
+	}
+}
+
 func (r *UserRepository) Create(user *domain.User) error {
+	ctx := context.Background()
+	if _, err := r.client.User.Create().SetEmail(user.Email).SetID(uuid.New()).SetCreatedAt(time.Now()).SetUpdatedAt(time.Now()).Save(ctx); err != nil {
+		fmt.Println("Creating User: ", err)
+		return err
+	}
+	fmt.Println(user.Email, " user created")
+	
 	return nil
 }
 
-func (r *UserRepository) FindById(id string) error {
-	return nil
+func (r *UserRepository) FindById(id string) (*domain.User, error) {
+	ctx := context.Background()
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	u, err := r.client.User.Query().Where(user.ID(uuid)).Only(ctx)
+	return r.toDomainUser(u), err
 }
 
-func (r *UserRepository) FindByEmail(email string) error {
-	return nil
+func (r *UserRepository) FindByEmail(email string) (*domain.User, error) {
+	ctx := context.Background()
+	u, err := r.client.User.Query().Where(user.Email(email)).Only(ctx)
+	return r.toDomainUser(u), err
 }
 
 func (r *UserRepository) Update(user *domain.User) error {
