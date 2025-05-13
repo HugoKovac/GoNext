@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"GoNext/base/internal/core/domain"
 	"GoNext/base/internal/core/ports"
 
 	"github.com/gofiber/fiber/v2"
@@ -17,18 +16,18 @@ func NewUserHandler(service ports.UserService) *UserHandler {
 	}
 }
 
-func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
-	var user domain.User
-	if err := c.BodyParser(&user); err != nil { // ? where is validator
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid request body",
-		})
-	}
+// func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
+// 	var user domain.User
+// 	if err := c.BodyParser(&user); err != nil { // ? where is validator
+// 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+// 			"error": "Invalid request body",
+// 		})
+// 	}
 
-	h.userService.Register(&user)
+// 	h.userService.Register(&user)
 
-	return c.JSON("Create User")
-}
+// 	return c.JSON("Create User")
+// }
 
 func (h *UserHandler) GetById(c *fiber.Ctx) error {
 	idParam := struct {

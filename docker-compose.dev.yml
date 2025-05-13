@@ -13,6 +13,7 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=postgres
       - DB_NAME=gonext_dev
+      - JWT_SECRET=debugPass
     depends_on:
       - postgres_dev
     networks:

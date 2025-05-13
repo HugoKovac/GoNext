@@ -31,20 +31,23 @@ func (r *UserRepository) toDomainUser(entUser *ent.User) *domain.User {
 	return &domain.User{
 		Id: entUser.ID.String(),
 		Email: entUser.Email,
+		Password: entUser.Password,
 		CreatedAt: entUser.CreatedAt,
 		UpdatedAt: entUser.CreatedAt,
 	}
 }
 
-func (r *UserRepository) Create(user *domain.User) error {
+func (r *UserRepository) Create(user *domain.User) (*domain.User, error) {
 	ctx := context.Background()
-	if _, err := r.client.User.Create().SetEmail(user.Email).SetID(uuid.New()).SetCreatedAt(time.Now()).SetUpdatedAt(time.Now()).Save(ctx); err != nil {
+	dUser, err := r.client.User.Create().SetEmail(user.Email).SetPassword(user.Password).SetID(uuid.New()).SetCreatedAt(time.Now()).SetUpdatedAt(time.Now()).Save(ctx)
+	if err != nil {
 		fmt.Println("Creating User: ", err)
-		return err
+		return nil, err
 	}
 	fmt.Println(user.Email, " user created")
+	fmt.Println(dUser, ": duser")
 	
-	return nil
+	return r.toDomainUser(dUser), nil
 }
 
 func (r *UserRepository) FindById(id string) (*domain.User, error) {

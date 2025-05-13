@@ -7,6 +7,7 @@ import (
 	"GoNext/base/internal/adapters/handlers"
 	"GoNext/base/internal/adapters/repositories"
 	"GoNext/base/internal/core/services"
+	"GoNext/base/internal/middleware"
 	"GoNext/base/pkg/database"
 
 	"github.com/gofiber/fiber/v2"
@@ -19,6 +20,11 @@ func main() {
 	dbUser := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
+	jwtSecret := os.Getenv("JWT_SECRET")
+    if jwtSecret == "" {
+        jwtSecret = "default_jwt_secret" // Not recommended for production
+        log.Println("Warning: Using default JWT secret. Set JWT_SECRET environment variable for security.")
+    }
 
 	entClient := database.NewEntClient(dbHost, dbPort, dbUser, dbPassword, dbName)
 	defer entClient.Close()
@@ -26,18 +32,21 @@ func main() {
 	userRepo := repositories.NewUserRepository(entClient)
 
 	userService := services.NewUserService(userRepo)
+	authService := services.NewAuthService(userRepo, jwtSecret)
 
 	userHandler := handlers.NewUserHandler(userService)
+	authHandler := handlers.NewAuthHandler(authService, userService)
 
 	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
+	app.Post("/api/auth/register", authHandler.Register)
+    app.Post("/api/auth/login", authHandler.Login)
 
-	app.Post("/users/create", userHandler.CreateUser)
-	app.Post("/users/id", userHandler.GetById)
-	app.Post("/users/email", userHandler.GetByEmail)
+    // Protected routes
+    api := app.Group("/api", middleware.JWTAuthentication(authService))
+    // api.Get("/users/me", userHandler.GetCurrentUser)
+    api.Get("/users", userHandler.GetById)
+
 
 	log.Fatal(app.Listen(":8080"))
 }

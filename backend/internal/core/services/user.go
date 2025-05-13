@@ -3,7 +3,10 @@ package services
 import (
 	"GoNext/base/internal/core/domain"
 	"GoNext/base/internal/core/ports"
-	"fmt"
+	"errors"
+	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
@@ -16,10 +19,29 @@ func NewUserService(userRepo ports.UserRepository) ports.UserService {
 	}
 }
 
-func (s *UserService) Register(user *domain.User) error {
-	fmt.Println("Register: ", user)
-	s.UserRepository.Create(user)
-	return nil
+func (s *UserService) Register(user *domain.User) (*domain.User, error) {
+	// fmt.Println("Register: ", user)
+	// s.UserRepository.Create(user)
+	// return nil
+	// Check if user already exists
+    existingUser, _ := s.UserRepository.FindByEmail(user.Email)
+    if existingUser != nil {
+        return nil, errors.New("user with this email already exists")
+    }
+
+    // Hash password
+    hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+    if err != nil {
+        return nil, err
+    }
+    user.Password = string(hashedPassword)
+
+    // Set timestamps
+    now := time.Now()
+    user.CreatedAt = now
+    user.UpdatedAt = now
+
+    return s.UserRepository.Create(user)
 }
 
 func (s *UserService) GetById(id string) (*domain.User, error) {

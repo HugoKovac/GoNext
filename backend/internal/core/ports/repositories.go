@@ -5,7 +5,7 @@ import (
 )
 
 type UserRepository interface {
-	Create(user *domain.User) error
+	Create(user *domain.User) (*domain.User, error)
 	FindById(id string) (*domain.User, error)
 	FindByEmail(email string) (*domain.User, error)
 	Update(user *domain.User) error
