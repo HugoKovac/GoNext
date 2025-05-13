@@ -3,3 +3,5 @@
 [08/May/2025:12:01:03 +0000] - 200 200 - GET http api.gonext.com "/" [Client 192.168.65.1] [Length 18] [Gzip -] [Sent-to backend_prod] "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" "http://localhost:81/"
 [08/May/2025:12:03:07 +0000] - 200 200 - GET http api.gonext.com "/" [Client 192.168.65.1] [Length 18] [Gzip -] [Sent-to backend_prod] "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" "http://localhost:81/"
 [08/May/2025:12:03:19 +0000] - 200 200 - GET http api.gonext.com "/" [Client 192.168.65.1] [Length 18] [Gzip -] [Sent-to backend_prod] "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" "http://localhost:81/"
+[08/May/2025:12:29:54 +0000] - 200 200 - GET http api.gonext.com "/" [Client 192.168.65.1] [Length 18] [Gzip -] [Sent-to backend_prod] "curl/8.11.1" "-"
+[08/May/2025:12:29:55 +0000] - 200 200 - GET http api.gonext.com "/" [Client 192.168.65.1] [Length 18] [Gzip -] [Sent-to backend_prod] "curl/8.11.1" "-"
