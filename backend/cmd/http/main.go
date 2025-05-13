@@ -45,7 +45,7 @@ func main() {
     // Protected routes
     api := app.Group("/api", middleware.JWTAuthentication(authService))
     // api.Get("/users/me", userHandler.GetCurrentUser)
-    api.Get("/users", userHandler.GetById)
+    api.Get("/users", userHandler.GetByEmail)
 
 
 	log.Fatal(app.Listen(":8080"))

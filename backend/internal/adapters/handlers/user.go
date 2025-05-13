@@ -62,5 +62,6 @@ func (h *UserHandler) GetByEmail(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Bad Request")
 	}
+	user.Password = ""
 	return c.JSON(user)
 }
