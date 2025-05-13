@@ -44,7 +44,7 @@ func main() {
 
     // Protected routes
     api := app.Group("/api", middleware.JWTAuthentication(authService))
-    // api.Get("/users/me", userHandler.GetCurrentUser)
+    api.Get("/users/me", userHandler.GetCurrentUser)
     api.Get("/users", userHandler.GetByEmail)
 
 

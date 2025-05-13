@@ -1,0 +1,2 @@
+2025/05/13 19:49:06 [error] 190#190: *23 backend_prod could not be resolved (3: Host not found), client: 192.168.65.1, server: api.gonext.com, request: "POST /api/auth/register HTTP/1.1", host: "api.gonext.com"
+2025/05/13 19:49:22 [error] 186#186: *25 backend_prod could not be resolved (3: Host not found), client: 192.168.65.1, server: api.gonext.com, request: "POST /api/auth/register HTTP/1.1", host: "api.gonext.com"

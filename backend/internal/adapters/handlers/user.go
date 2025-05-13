@@ -16,19 +16,6 @@ func NewUserHandler(service ports.UserService) *UserHandler {
 	}
 }
 
-// func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
-// 	var user domain.User
-// 	if err := c.BodyParser(&user); err != nil { // ? where is validator
-// 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-// 			"error": "Invalid request body",
-// 		})
-// 	}
-
-// 	h.userService.Register(&user)
-
-// 	return c.JSON("Create User")
-// }
-
 func (h *UserHandler) GetById(c *fiber.Ctx) error {
 	idParam := struct {
 		ID string `json:"id"`
@@ -64,4 +51,18 @@ func (h *UserHandler) GetByEmail(c *fiber.Ctx) error {
 	}
 	user.Password = ""
 	return c.JSON(user)
+}
+
+func (h *UserHandler) GetCurrentUser(c *fiber.Ctx) error {
+    userID := c.Locals("userID").(string)
+
+    user, err := h.userService.GetById(userID)
+    if err != nil {
+        return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+            "error": "User not found",
+        })
+    }
+	user.Password = ""
+
+    return c.JSON(user)
 }

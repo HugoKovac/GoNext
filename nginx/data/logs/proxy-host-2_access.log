@@ -5,3 +5,7 @@
 [08/May/2025:12:03:19 +0000] - 200 200 - GET http api.gonext.com "/" [Client 192.168.65.1] [Length 18] [Gzip -] [Sent-to backend_prod] "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" "http://localhost:81/"
 [08/May/2025:12:29:54 +0000] - 200 200 - GET http api.gonext.com "/" [Client 192.168.65.1] [Length 18] [Gzip -] [Sent-to backend_prod] "curl/8.11.1" "-"
 [08/May/2025:12:29:55 +0000] - 200 200 - GET http api.gonext.com "/" [Client 192.168.65.1] [Length 18] [Gzip -] [Sent-to backend_prod] "curl/8.11.1" "-"
+[13/May/2025:19:49:06 +0000] - - 502 - POST http api.gonext.com "/api/auth/register" [Client 192.168.65.1] [Length 154] [Gzip -] [Sent-to backend_prod] "curl/8.11.1" "-"
+[13/May/2025:19:49:22 +0000] - - 502 - POST http api.gonext.com "/api/auth/register" [Client 192.168.65.1] [Length 154] [Gzip -] [Sent-to backend_prod] "curl/8.11.1" "-"
+[13/May/2025:19:51:17 +0000] - 200 200 - GET http gonext.com "/" [Client 192.168.65.1] [Length 3366] [Gzip -] [Sent-to frontend_prod] "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" "-"
+[13/May/2025:19:52:02 +0000] - 304 304 - GET http gonext.com "/" [Client 192.168.65.1] [Length 0] [Gzip -] [Sent-to frontend_prod] "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" "http://localhost:81/"

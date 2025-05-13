@@ -7,6 +7,13 @@ services:
       - 8080:8080
     depends_on:
       - postgres_prod
+    environment:
+      - DB_HOST=postgres_prod
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=gonext
+      - JWT_SECRET=debugPass
     networks:
       - gonext_network_prod
 
