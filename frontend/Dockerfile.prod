@@ -6,6 +6,9 @@ COPY ./go-next/package.json .
 COPY ./go-next/package-lock.json .
 
 RUN npm install
+
+COPY ./go-next .
+
 RUN npm run build
 
 CMD ["npm", "run", "start"]

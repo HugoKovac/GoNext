@@ -41,7 +41,6 @@ services:
     networks:
       - gonext_network_prod
     volumes:
-      - ./frontend/go-next:/app
       - frontend_data_prod:/app/node_modules
 
   app:
