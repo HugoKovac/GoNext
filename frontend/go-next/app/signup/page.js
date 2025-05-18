@@ -1,10 +1,10 @@
-export default function Login() {
+export default function Signup() {
   return (
     <div className="flex flex-col h-screen w-screen justify-center">
       <div className="card w-96 bg-base-100 shadow-sm mx-auto border-2 max-w-6/7 py-6">
         <div className="card-body flex flex-col">
           <div className="flex justify-around">
-            <h2 className="text-3xl font-bold">Sign In</h2>
+            <h2 className="text-3xl font-bold">Sign Up</h2>
           </div>
           <div className="my-6 flex flex-col">
             <label className="input validator my-2">
@@ -68,11 +68,46 @@ export default function Login() {
               At least one lowercase letter <br />
               At least one uppercase letter
             </p>
+            <label className="input validator my-2">
+            <svg
+                className="h-[1em] opacity-50"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <g
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                  strokeWidth="2.5"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
+                  <circle
+                    cx="16.5"
+                    cy="7.5"
+                    r=".5"
+                    fill="currentColor"
+                  ></circle>
+                </g>
+              </svg>
+              <input type="password"
+                required
+                placeholder="Confirm Password"
+                minLength="8"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                title="Must match password"
+                 />
+            </label>
+            <div className="validator-hint hidden">
+              Passwords do not match
+            </div>
           </div>
 
           <div className="flex flex-col justify-around">
-            <button className="btn btn-primary my-1">Sign In</button>
-            <button className="btn my-1">Sign up</button>
+            <button className="btn btn-primary my-1">Sign Up</button>
+            <a className="btn my-1" href="/signin">
+              Sign In
+            </a>
           </div>
         </div>
       </div>
