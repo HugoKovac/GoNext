@@ -2,14 +2,10 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY ./go-next/package.json ./go-next/package-lock.json* ./
+COPY ./go-next/package.json .
+COPY ./go-next/package-lock.json .
 
-RUN npm ci
-
-COPY ./go-next .
-
+RUN npm install
 RUN npm run build
-
-EXPOSE 3000
 
 CMD ["npm", "run", "start"]

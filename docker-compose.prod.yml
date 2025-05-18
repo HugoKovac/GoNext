@@ -40,6 +40,9 @@ services:
       - postgres_prod
     networks:
       - gonext_network_prod
+    volumes:
+      - ./frontend/go-next:/app
+      - frontend_data_prod:/app/node_modules
 
   app:
     image: 'jc21/nginx-proxy-manager:latest'
@@ -67,6 +70,7 @@ services:
 
 volumes:
   postgres_data_prod:
+  frontend_data_prod:
 
 networks:
   gonext_network_prod:

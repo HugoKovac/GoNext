@@ -42,9 +42,13 @@ services:
       - postgres_dev
     networks:
       - gonext_network_dev
+    volumes:
+      - ./frontend/go-next:/app
+      - frontend_data_dev:/app/node_modules
 
 volumes:
   postgres_data_dev:
+  frontend_data_dev:
 
 networks:
   gonext_network_dev:
