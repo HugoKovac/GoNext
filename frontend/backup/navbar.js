@@ -35,12 +35,12 @@ export default function Navbar({ user }) {
             <li>
               <a>About</a>
             </li>
-            {user && (
+            {!user && (
               <li className="md:hidden">
                 <a href="/signin">Sign In</a>
               </li>
             )}
-            {user && (
+            {!user && (
               <li className="md:hidden">
                 <a href="/signup">Sign Up</a>
               </li>
@@ -55,12 +55,12 @@ export default function Navbar({ user }) {
       </div>
       <div className="navbar-end">
         <div className="hidden md:flex">
-          {user && (
+          {!user && (
             <a className="btn btn-primary mx-2" href="/signin">
               Sign In
             </a>
           )}
-          {user && (
+          {!user && (
             <a className="btn mx-2" href="/signup">
               Sign Up
             </a>

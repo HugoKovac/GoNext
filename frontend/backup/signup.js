@@ -1,8 +1,28 @@
+'use client';
+
+import { useState } from 'react';
+
 export default function Signup() {
+  const [error, setError] = useState(null);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await response.json();
+    if (response.ok) {
+      setError(null);
+    } else {
+      setError(data.message);
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen w-screen justify-center">
       <div className="card w-96 bg-base-100 shadow-sm mx-auto border-2 max-w-6/7 py-6">
-        <form className="card-body flex flex-col" action="http://localhost:8080/api/auth/register" method="post">
+        <form className="card-body flex flex-col" onSubmit={handleSubmit}>
           <div className="flex justify-around">
             <h2 className="text-3xl font-bold">Sign Up</h2>
           </div>
