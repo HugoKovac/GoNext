@@ -2,7 +2,7 @@ export default function Signup() {
   return (
     <div className="flex flex-col h-screen w-screen justify-center">
       <div className="card w-96 bg-base-100 shadow-sm mx-auto border-2 max-w-6/7 py-6">
-        <div className="card-body flex flex-col">
+        <form className="card-body flex flex-col" action="http://localhost:8080/api/auth/register" method="post">
           <div className="flex justify-around">
             <h2 className="text-3xl font-bold">Sign Up</h2>
           </div>
@@ -24,7 +24,7 @@ export default function Signup() {
                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                 </g>
               </svg>
-              <input type="email" placeholder="mail@site.com" required />
+              <input type="email" placeholder="mail@site.com" required name="email" />
             </label>
             <div className="validator-hint hidden">
               Enter valid email address
@@ -55,6 +55,7 @@ export default function Signup() {
               <input
                 type="password"
                 required
+                name="password"
                 placeholder="Password"
                 minLength="8"
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
@@ -109,7 +110,7 @@ export default function Signup() {
               Sign In
             </a>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

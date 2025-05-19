@@ -1,6 +1,6 @@
 'use client';
 
-export default function Navbar() {
+export default function Navbar({ user }) {
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -35,12 +35,16 @@ export default function Navbar() {
             <li>
               <a>About</a>
             </li>
-            <li className="md:hidden">
-              <a href="/signin">Sign In</a>
-            </li>
-            <li className="md:hidden">
-              <a href="/signup">Sign Up</a>
-            </li>
+            {user && (
+              <li className="md:hidden">
+                <a href="/signin">Sign In</a>
+              </li>
+            )}
+            {user && (
+              <li className="md:hidden">
+                <a href="/signup">Sign Up</a>
+              </li>
+            )}
           </ul>
         </div>
       </div>
@@ -51,12 +55,16 @@ export default function Navbar() {
       </div>
       <div className="navbar-end">
         <div className="hidden md:flex">
-          <a className="btn btn-primary mx-2" href="/signin">
-            Sign In
-          </a>
-          <a className="btn mx-2" href="/signup">
-            Sign Up
-          </a>
+          {user && (
+            <a className="btn btn-primary mx-2" href="/signin">
+              Sign In
+            </a>
+          )}
+          {user && (
+            <a className="btn mx-2" href="/signup">
+              Sign Up
+            </a>
+          )}
         </div>
       </div>
     </div>

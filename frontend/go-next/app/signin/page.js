@@ -1,8 +1,41 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+  
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    fetch("/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+      credentials: "include",
+    }).then((res) => {
+      if (res.ok) {
+        res.json().then((data) => {
+          console.log(data);
+        });
+        router.push("/");
+      } else {
+        console.log(res);
+      }
+    });
+  };
+
   return (
     <div className="flex flex-col h-screen w-screen justify-center">
       <div className="card w-96 bg-base-100 shadow-sm mx-auto border-2 max-w-6/7 py-6">
-        <div className="card-body flex flex-col">
+        <form className="card-body flex flex-col" onSubmit={handleSubmit}>
           <div className="flex justify-around">
             <h2 className="text-3xl font-bold">Sign In</h2>
           </div>
@@ -24,7 +57,9 @@ export default function Login() {
                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                 </g>
               </svg>
-              <input type="email" placeholder="mail@site.com" required />
+              <input type="email" placeholder="mail@site.com" required name="email" onChange={(e) => {
+                setEmail(e.target.value);
+              }} />
             </label>
             <div className="validator-hint hidden">
               Enter valid email address
@@ -55,10 +90,14 @@ export default function Login() {
               <input
                 type="password"
                 required
+                name="password"
                 placeholder="Password"
                 minLength="8"
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
               />
             </label>
             <p className="validator-hint hidden">
@@ -76,7 +115,7 @@ export default function Login() {
               Sign up
             </a>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
