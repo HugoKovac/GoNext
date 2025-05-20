@@ -1,22 +1,31 @@
-'use client';
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
-import { useState } from 'react';
 
-export default function Signup() {
-  const [error, setError] = useState(null);
-  const handleSubmit = async (e) => {
+export default function Login() {
+  const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const response = await fetch('/api/auth/register', {
+    fetch('/api/auth/register', {
       method: 'POST',
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    }).then((res) => {
+      if (res.ok) {
+        res.json().then((data) => {
+          console.log(data);
+        });
+        navigate("/");
+      } else {
+        setError("Invalid email or password");
+      }
     });
-    const data = await response.json();
-    if (response.ok) {
-      setError(null);
-    } else {
-      setError(data.message);
-    }
   };
 
   return (
@@ -44,7 +53,7 @@ export default function Signup() {
                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                 </g>
               </svg>
-              <input type="email" placeholder="mail@site.com" required name="email" />
+              <input type="email" placeholder="mail@site.com" required name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </label>
             <div className="validator-hint hidden">
               Enter valid email address
@@ -77,9 +86,11 @@ export default function Signup() {
                 required
                 name="password"
                 placeholder="Password"
-                minLength="8"
+                minLength={8}
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </label>
             <p className="validator-hint hidden">
@@ -90,7 +101,7 @@ export default function Signup() {
               At least one uppercase letter
             </p>
             <label className="input validator my-2">
-            <svg
+              <svg
                 className="h-[1em] opacity-50"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -117,8 +128,11 @@ export default function Signup() {
                 minLength="8"
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 title="Must match password"
-                 />
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
             </label>
+            {error && <p className="text-error">{error}</p>}
             <div className="validator-hint hidden">
               Passwords do not match
             </div>
@@ -134,4 +148,4 @@ export default function Signup() {
       </div>
     </div>
   );
-}
+} 

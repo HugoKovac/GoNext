@@ -1,16 +1,14 @@
-"use client";
-
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-
+import { useLocation, useNavigate } from "react-router";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
   
   
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     fetch("/api/auth/login", {
@@ -25,9 +23,9 @@ export default function Login() {
         res.json().then((data) => {
           console.log(data);
         });
-        router.push("/");
+        navigate("/");
       } else {
-        console.log(res);
+        setError("Invalid email or password");
       }
     });
   };
@@ -100,6 +98,7 @@ export default function Login() {
                 }}
               />
             </label>
+            {error && <p className="text-error">{error}</p>}
             <p className="validator-hint hidden">
               Must be more than 8 characters, including
               <br />
@@ -119,4 +118,4 @@ export default function Login() {
       </div>
     </div>
   );
-}
+} 

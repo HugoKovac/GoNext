@@ -5,8 +5,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  createBrowserRouter,
+  RouterProvider,
+  type RouteObject,
 } from "react-router";
-
+import routes from "./routes";
 import type { Route } from "./+types/root";
 import { Navbar } from "./components/Navbar";
 import "./app.css";
