@@ -1,23 +1,21 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
-function Login() {
+
+function SignUp() {
+  const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
-  
-  
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    fetch("/api/auth/login", {
-      method: "POST",
+    fetch('/api/auth/register', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email, password }),
-      credentials: "include",
     }).then((res) => {
       if (res.ok) {
         res.json().then((data) => {
@@ -35,7 +33,7 @@ function Login() {
       <div className="card w-96 bg-base-100 shadow-sm mx-auto border-2 max-w-6/7 py-6">
         <form className="card-body flex flex-col" onSubmit={handleSubmit}>
           <div className="flex justify-around">
-            <h2 className="text-3xl font-bold">Sign In</h2>
+            <h2 className="text-3xl font-bold">Sign Up</h2>
           </div>
           <div className="my-6 flex flex-col">
             <label className="input validator my-2">
@@ -55,9 +53,7 @@ function Login() {
                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                 </g>
               </svg>
-              <input type="email" placeholder="mail@site.com" required name="email" onChange={(e) => {
-                setEmail(e.target.value);
-              }} />
+              <input type="email" placeholder="mail@site.com" required name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </label>
             <div className="validator-hint hidden">
               Enter valid email address
@@ -90,15 +86,13 @@ function Login() {
                 required
                 name="password"
                 placeholder="Password"
-                minLength="8"
+                minLength={8}
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </label>
-            {error && <p className="text-error">{error}</p>}
             <p className="validator-hint hidden">
               Must be more than 8 characters, including
               <br />
@@ -106,12 +100,48 @@ function Login() {
               At least one lowercase letter <br />
               At least one uppercase letter
             </p>
+            <label className="input validator my-2">
+              <svg
+                className="h-[1em] opacity-50"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <g
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                  strokeWidth="2.5"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
+                  <circle
+                    cx="16.5"
+                    cy="7.5"
+                    r=".5"
+                    fill="currentColor"
+                  ></circle>
+                </g>
+              </svg>
+              <input type="password"
+                required
+                placeholder="Confirm Password"
+                minLength="8"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                title="Must match password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </label>
+            {error && <p className="text-error">{error}</p>}
+            <div className="validator-hint hidden">
+              Passwords do not match
+            </div>
           </div>
 
           <div className="flex flex-col justify-around">
-            <button className="btn btn-primary my-1">Sign In</button>
-            <a className="btn my-1" href="/signup">
-              Sign up
+            <button className="btn btn-primary my-1">Sign Up</button>
+            <a className="btn my-1" href="/signin">
+              Sign In
             </a>
           </div>
         </form>
@@ -120,4 +150,4 @@ function Login() {
   );
 } 
 
-export default Login;
+export default SignUp;
