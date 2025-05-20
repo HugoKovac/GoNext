@@ -27,9 +27,9 @@ func (s *authService) Authenticate(creds domain.UserCredentials) (string, error)
     // Get user by email
     user, err := s.userRepo.FindByEmail(creds.Email)
     if err != nil {
-        return "", errors.New("invalid credentials")
+        return "", errors.New("User does not exist")
     }
-
+    
     // Compare passwords
     err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(creds.Password))
     if err != nil {

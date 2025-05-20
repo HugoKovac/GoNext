@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.7",
     "daisyui": "^5.0.35",
+    "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "react": "^19.1.0",
     "react-cookie": "^8.0.1",

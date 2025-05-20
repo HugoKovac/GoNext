@@ -2,7 +2,7 @@ import { useLocation } from "react-router";
 import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, logout } = useAuth();
 
   return (
     <div className="navbar bg-base-100 shadow-sm">
@@ -67,6 +67,11 @@ function Navbar() {
             <a className="btn mx-2" href="/signup">
               Sign Up
             </a>
+          )}
+          {user && (
+            <button className="btn mx-2" onClick={logout}>
+              Sign Out
+            </button>
           )}
         </div>
       </div>

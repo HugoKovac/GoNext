@@ -4,7 +4,6 @@ package handlers
 import (
 	"GoNext/base/internal/core/domain"
 	"GoNext/base/internal/core/ports"
-	"log"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -53,7 +52,6 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 
     token, err := h.authService.Authenticate(creds)
 	if err != nil {
-		log.Println("error authenticating user", err)
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid credentials",
 		})
@@ -90,7 +88,7 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	token, err := h.authService.Authenticate(creds)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Invalid credentials",
+			"error": err.Error(),
 		})
 	}
 

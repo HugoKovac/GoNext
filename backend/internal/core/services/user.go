@@ -20,10 +20,6 @@ func NewUserService(userRepo ports.UserRepository) ports.UserService {
 }
 
 func (s *UserService) Register(user *domain.User) (*domain.User, error) {
-	// fmt.Println("Register: ", user)
-	// s.UserRepository.Create(user)
-	// return nil
-	// Check if user already exists
     existingUser, _ := s.UserRepository.FindByEmail(user.Email)
     if existingUser != nil {
         return nil, errors.New("user with this email already exists")

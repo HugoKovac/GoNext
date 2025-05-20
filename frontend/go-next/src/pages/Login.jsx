@@ -25,7 +25,9 @@ function Login() {
         });
         navigate("/");
       } else {
-        setError("Invalid email or password");
+        res.json().then((data) => {
+          setError(data.error);
+        })
       }
     });
   };
