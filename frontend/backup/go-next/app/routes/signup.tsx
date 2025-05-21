@@ -10,7 +10,7 @@ export default function Login() {
   const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch('/api/auth/register', {
+    fetch("/api/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

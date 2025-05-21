@@ -1,19 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-
+import { useAuth } from "../context/AuthContext";
 
 function SignUp() {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const { login } = useAuth();
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    fetch('/api/auth/register', {
-      method: 'POST',
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
     }).then((res) => {
@@ -21,6 +23,7 @@ function SignUp() {
         res.json().then((data) => {
           console.log(data);
         });
+        login();
         navigate("/");
       } else {
         setError("Invalid email or password");
@@ -53,7 +56,14 @@ function SignUp() {
                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                 </g>
               </svg>
-              <input type="email" placeholder="mail@site.com" required name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <input
+                type="email"
+                placeholder="mail@site.com"
+                required
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </label>
             <div className="validator-hint hidden">
               Enter valid email address
@@ -122,7 +132,8 @@ function SignUp() {
                   ></circle>
                 </g>
               </svg>
-              <input type="password"
+              <input
+                type="password"
                 required
                 placeholder="Confirm Password"
                 minLength="8"
@@ -133,9 +144,7 @@ function SignUp() {
               />
             </label>
             {error && <p className="text-error">{error}</p>}
-            <div className="validator-hint hidden">
-              Passwords do not match
-            </div>
+            <div className="validator-hint hidden">Passwords do not match</div>
           </div>
 
           <div className="flex flex-col justify-around">
@@ -148,6 +157,6 @@ function SignUp() {
       </div>
     </div>
   );
-} 
+}
 
 export default SignUp;

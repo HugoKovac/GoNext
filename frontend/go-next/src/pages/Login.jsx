@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
   
   
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    fetch("/api/auth/login", {
+    console.log(import.meta.env.VITE_API_URL);
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,10 +22,10 @@ function Login() {
       credentials: "include",
     }).then((res) => {
       if (res.ok) {
-        res.json().then((data) => {
-          console.log(data);
+        res.json().then(() => {
+          login();
+          navigate("/");
         });
-        navigate("/");
       } else {
         res.json().then((data) => {
           setError(data.error);

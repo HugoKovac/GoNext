@@ -48,6 +48,11 @@ function Navbar() {
                 <a href="/signup">Sign Up</a>
               </li>
             )}
+            {user && (
+              <li className="md:hidden">
+                <button onClick={logout}>Sign Out</button>
+              </li>
+            )}
           </ul>
         </div>
       </div>

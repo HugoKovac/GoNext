@@ -1,24 +1,18 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite';
-
-
-const backendUrl = process.env.BACKEND_URL || "http://backend_dev:8080";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
-  server: {
-    port: 3000,
-    proxy: {
-      "/api": backendUrl,
+export default defineConfig(({ mode }) => {
+  const isDev = mode === "development";
+  return {
+    plugins: [react(), tailwindcss()],
+    server: {
+      port: 3000,
+      proxy: isDev ? {
+          "/api": "http://backend_dev:8080",
+        }
+      : undefined,
     },
-  },
-  preview: {
-    port: 3000,
-    proxy: {
-      "/api": backendUrl,
-    },
-    allowedHosts: "gonext.com",
-  },
-})
+  };
+});

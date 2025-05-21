@@ -1,34 +1,37 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
+
   const [user, setUser] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
+  function getUserFromCookies() {
+    const jwtToken = Cookies.get("token");
+    if (jwtToken) {
+      const decodedToken = jwtDecode(jwtToken);
+      setUser(decodedToken);
+    }
+    setIsLoading(false);
+  }
+
   useEffect(() => {
     const initializeAuth = () => {
-      const jwtToken = Cookies.get("token");
-      if (jwtToken) {
-        const decodedToken = jwtDecode(jwtToken);
-        setUser(decodedToken);
-      }
-      setIsLoading(false);
+      getUserFromCookies();
     };
-
     initializeAuth();
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", userData);
+  const login = () => {
+    getUserFromCookies();
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
+    Cookies.remove("token");
   };
 
   if (isLoading) {
