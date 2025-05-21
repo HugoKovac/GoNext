@@ -6,6 +6,7 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 import Login from "./pages/Login";
 import SignUp from "./pages/Signup";
 import ProtectedHome from "./pages/ProtectedHome";
+import NotFound from "./pages/NotFound";
 import "./index.css";
 import App from "./App.jsx";
 import Navbar from "./components/Navbar";
@@ -22,6 +23,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/protected" element={<ProtectedRoute />}>
             <Route path="/protected/home" element={<ProtectedHome />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
