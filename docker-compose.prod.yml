@@ -45,7 +45,7 @@ services:
     volumes:
       - frontend_data_prod:/app/node_modules
 
-  app:
+  nginx_proxy_manager:
     image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
     ports:
