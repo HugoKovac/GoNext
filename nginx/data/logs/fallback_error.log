@@ -1,2 +1,6 @@
 2025/05/13 19:50:31 [warn] 161#161: conflicting server name "api.gonext.com" on 0.0.0.0:80, ignored
 2025/05/13 19:50:31 [warn] 161#161: conflicting server name "api.gonext.com" on [::]:80, ignored
+2025/05/21 10:38:53 [warn] 150#150: conflicting server name "gonext.com" on 0.0.0.0:80, ignored
+2025/05/21 10:38:53 [warn] 150#150: conflicting server name "gonext.com" on [::]:80, ignored
+2025/05/21 10:39:01 [warn] 150#150: conflicting server name "gonext.com" on 0.0.0.0:80, ignored
+2025/05/21 10:39:01 [warn] 150#150: conflicting server name "gonext.com" on [::]:80, ignored

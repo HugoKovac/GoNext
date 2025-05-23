@@ -1,37 +1,52 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import Cookies from 'js-cookie';
 import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
-
   const [user, setUser] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
-  function getUserFromCookies() {
-    const jwtToken = Cookies.get("token");
-    if (jwtToken) {
-      const decodedToken = jwtDecode(jwtToken);
-      setUser(decodedToken);
+  async function checkAuthStatus() {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/status`, {
+        credentials: 'include', // This is important for cookies
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+      } else {
+        setUser(null);
+      }
+    } catch (error) {
+      console.error("Auth check failed:", error);
+      setUser(null);
     }
     setIsLoading(false);
   }
 
   useEffect(() => {
     const initializeAuth = () => {
-      getUserFromCookies();
+      checkAuthStatus();
     };
     initializeAuth();
   }, []);
 
   const login = () => {
-    getUserFromCookies();
+    checkAuthStatus();
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
     setUser(null);
-    Cookies.remove("token");
   };
 
   if (isLoading) {

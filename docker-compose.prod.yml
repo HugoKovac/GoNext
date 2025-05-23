@@ -36,8 +36,6 @@ services:
       dockerfile: Dockerfile.prod
     ports:
       - 3000:3000
-    environment:
-      - BACKEND_URL=https://api.gonext.com
     depends_on:
       - postgres_prod
     networks:

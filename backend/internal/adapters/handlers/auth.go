@@ -45,12 +45,12 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 		})
 	}
 
-    creds := domain.UserCredentials{
-        Email: userCopy.Email,
-        Password: userCopy.Password,
-    }
+	creds := domain.UserCredentials{
+		Email:    userCopy.Email,
+		Password: userCopy.Password,
+	}
 
-    token, err := h.authService.Authenticate(creds)
+	token, err := h.authService.Authenticate(creds)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid credentials",
@@ -60,10 +60,15 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 	// Don't return the password
 	dUser.Password = ""
 
-    cookie := fiber.Cookie{
-		Name:    "token",
-		Value:   token,
-		Expires: time.Now().Add(time.Hour * 24),
+	cookie := fiber.Cookie{
+		Name:     "token",
+		Value:    token,
+		Domain:   ".gonext.com",
+		Secure:   true,
+		HTTPOnly: true,
+		SameSite: "Lax",
+		Expires:  time.Now().Add(time.Hour * 24),
+		Path:     "/",
 	}
 	c.Cookie(&cookie)
 
@@ -93,12 +98,54 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	}
 
 	cookie := fiber.Cookie{
-		Name:    "token",
-		Value:   token,
-		Expires: time.Now().Add(time.Hour * 24),
+		Name:     "token",
+		Value:    token,
+		Domain:   ".gonext.com",
+		Secure:   true,
+		HTTPOnly: true,
+		SameSite: "Lax",
+		Expires:  time.Now().Add(time.Hour * 24),
+		Path:     "/",
 	}
 	c.Cookie(&cookie)
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Login successful",
+	})
+}
+
+func (h *AuthHandler) Status(c *fiber.Ctx) error {
+	token := c.Cookies("token")
+	if token == "" {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "No token provided",
+		})
+	}
+
+	claims, err := h.authService.ValidateToken(token)
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Invalid token",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"user": claims,
+	})
+}
+
+func (h *AuthHandler) Logout(c *fiber.Ctx) error {
+	cookie := fiber.Cookie{
+		Name:     "token",
+		Value:    "",
+		Domain:   ".gonext.com",
+		Secure:   true,
+		HTTPOnly: true,
+		SameSite: "Lax",
+		Expires:  time.Now().Add(-time.Hour), // Past time to expire the cookie
+		Path:     "/",
+	}
+	c.Cookie(&cookie)
+	return c.JSON(fiber.Map{
+		"message": "Logged out successfully",
 	})
 }
