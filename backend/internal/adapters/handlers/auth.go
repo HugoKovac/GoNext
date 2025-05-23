@@ -4,6 +4,7 @@ package handlers
 import (
 	"GoNext/base/internal/core/domain"
 	"GoNext/base/internal/core/ports"
+	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -60,10 +61,16 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 	// Don't return the password
 	dUser.Password = ""
 
+	var domain string
+	if os.Getenv("DEV") == "true" {
+		domain = ".localhost"
+	} else {
+		domain = ".gonext.com"
+	}
 	cookie := fiber.Cookie{
 		Name:     "token",
 		Value:    token,
-		Domain:   ".gonext.com",
+		Domain:   domain,
 		Secure:   true,
 		HTTPOnly: true,
 		SameSite: "Lax",
@@ -97,10 +104,16 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 		})
 	}
 
+	var domain string
+	if os.Getenv("DEV") == "true" {
+		domain = ".localhost"
+	} else {
+		domain = ".gonext.com"
+	}
 	cookie := fiber.Cookie{
 		Name:     "token",
 		Value:    token,
-		Domain:   ".gonext.com",
+		Domain:   domain,
 		Secure:   true,
 		HTTPOnly: true,
 		SameSite: "Lax",
@@ -134,10 +147,16 @@ func (h *AuthHandler) Status(c *fiber.Ctx) error {
 }
 
 func (h *AuthHandler) Logout(c *fiber.Ctx) error {
+	var domain string
+	if os.Getenv("DEV") == "true" {
+		domain = ".localhost"
+	} else {
+		domain = ".gonext.com"
+	}
 	cookie := fiber.Cookie{
 		Name:     "token",
 		Value:    "",
-		Domain:   ".gonext.com",
+		Domain:   domain,
 		Secure:   true,
 		HTTPOnly: true,
 		SameSite: "Lax",
