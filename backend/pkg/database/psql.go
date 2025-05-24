@@ -3,6 +3,7 @@ package database
 import (
 	"GoNext/base/ent"
 	"GoNext/base/ent/migrate"
+	"GoNext/base/pkg/config"
 	"context"
 	"fmt"
 	"log"
@@ -12,9 +13,9 @@ import (
 )
 
 // NewEntClient creates a new Ent client connected to PostgreSQL
-func NewEntClient(host, port, user, password, dbname string) *ent.Client {
+func NewEntClient(config config.DbConfig) *ent.Client {
     dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-        host, port, user, password, dbname)
+        config.Host, config.Port, config.User, config.Password, config.DbName)
     
     client, err := ent.Open(dialect.Postgres, dsn)
     if err != nil {
