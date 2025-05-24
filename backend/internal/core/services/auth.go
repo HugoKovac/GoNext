@@ -4,7 +4,6 @@ package services
 import (
 	"errors"
 
-	"GoNext/base/internal/core/domain"
 	"GoNext/base/internal/core/ports"
 	"GoNext/base/pkg/jwt"
 
@@ -23,15 +22,15 @@ func NewAuthService(userRepo ports.UserRepository, jwtSecret string) ports.AuthS
     }
 }
 
-func (s *authService) Authenticate(creds domain.UserCredentials) (string, error) {
+func (s *authService) Authenticate(username string, password string) (string, error) {
     // Get user by email
-    user, err := s.userRepo.FindByEmail(creds.Email)
+    user, err := s.userRepo.FindByEmail(username)
     if err != nil {
         return "", errors.New("User does not exist")
     }
     
     // Compare passwords
-    err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(creds.Password))
+    err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
     if err != nil {
         return "", errors.New("invalid credentials")
     }

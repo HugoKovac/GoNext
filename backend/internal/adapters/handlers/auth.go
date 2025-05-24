@@ -2,10 +2,15 @@
 package handlers
 
 import (
+	"GoNext/base/internal/adapters/dto"
 	"GoNext/base/internal/core/domain"
 	"GoNext/base/internal/core/ports"
+	customvalidator "GoNext/base/pkg/validator"
+	"log"
 	"os"
 	"time"
+
+	"github.com/go-playground/validator/v10"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -13,31 +18,38 @@ import (
 type AuthHandler struct {
 	authService ports.AuthService
 	userService ports.UserService
+	validate    *validator.Validate
 }
 
 func NewAuthHandler(authService ports.AuthService, userService ports.UserService) *AuthHandler {
+	v := validator.New()
+	customvalidator.RegisterCustomValidators(v)
+
 	return &AuthHandler{
 		authService: authService,
 		userService: userService,
+		validate:    v,
 	}
 }
 
 func (h *AuthHandler) Register(c *fiber.Ctx) error {
 	var user domain.User
 	if err := c.BodyParser(&user); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid request body",
-		})
+		log.Println(err.Error())
+		return c.Status(fiber.StatusBadRequest).SendString("Bad Request")
 	}
 
-	// Validate user data
-	if user.Email == "" || user.Password == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Email, and password are required",
-		})
+	// Create credentials DTO for validation
+	creds := dto.UserCredentials{
+		Email:    user.Email,
+		Password: user.Password,
 	}
 
-	userCopy := user
+	// Validate credentials
+	if err := h.validate.Struct(creds); err != nil {
+		log.Println(err.Error())
+		return c.Status(fiber.StatusBadRequest).SendString("Bad Request")
+	}
 
 	dUser, err := h.userService.Register(&user)
 	if err != nil {
@@ -46,12 +58,7 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 		})
 	}
 
-	creds := domain.UserCredentials{
-		Email:    userCopy.Email,
-		Password: userCopy.Password,
-	}
-
-	token, err := h.authService.Authenticate(creds)
+	token, err := h.authService.Authenticate(creds.Email, creds.Password)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid credentials",
@@ -83,25 +90,21 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 }
 
 func (h *AuthHandler) Login(c *fiber.Ctx) error {
-	var creds domain.UserCredentials
+	var creds dto.UserCredentials
 	if err := c.BodyParser(&creds); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid request body",
-		})
+		log.Println(err.Error())
+		return c.Status(fiber.StatusBadRequest).SendString("Bad Request")
 	}
 
-	// Validate credentials
-	if creds.Email == "" || creds.Password == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Email and password are required",
-		})
+	if err := h.validate.Struct(creds); err != nil {
+		log.Println(err.Error())
+		return c.Status(fiber.StatusBadRequest).SendString("Validation Error")
 	}
 
-	token, err := h.authService.Authenticate(creds)
+	token, err := h.authService.Authenticate(creds.Email, creds.Password)
 	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		log.Println(err.Error())
+		return c.Status(fiber.StatusUnauthorized).SendString("Unauthorized")
 	}
 
 	var domain string

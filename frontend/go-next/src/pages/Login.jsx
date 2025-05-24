@@ -27,9 +27,7 @@ function Login() {
           navigate("/");
         });
       } else {
-        res.json().then((data) => {
-          setError(data.error);
-        })
+        setError("Invalid email or password");
       }
     });
   };
@@ -94,9 +92,9 @@ function Login() {
                 required
                 name="password"
                 placeholder="Password"
-                minLength="8"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+                minLength="12"
+                pattern='^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?\":{}|<>])[A-Za-z\d!@#$%^&*(),.?\":{}|<>]{12,}$'
+                title="Password must be at least 12 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character"
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
@@ -104,11 +102,13 @@ function Login() {
             </label>
             {error && <p className="text-error">{error}</p>}
             <p className="validator-hint hidden">
-              Must be more than 8 characters, including
+              Password requirements:
               <br />
-              At least one number <br />
+              At least 12 characters long <br />
+              At least one uppercase letter <br />
               At least one lowercase letter <br />
-              At least one uppercase letter
+              At least one number <br />
+              At least one special character
             </p>
           </div>
 

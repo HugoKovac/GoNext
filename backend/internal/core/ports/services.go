@@ -11,6 +11,6 @@ type UserService interface {
 }
 
 type AuthService interface {
-    Authenticate(creds domain.UserCredentials) (string, error)
+    Authenticate(username string, password string) (string, error)
     ValidateToken(tokenString string) (string, error)
 }
