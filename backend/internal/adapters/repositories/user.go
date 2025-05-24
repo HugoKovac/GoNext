@@ -37,7 +37,7 @@ func (r *UserRepository) toDomainUser(entUser *ent.User) *domain.User {
 	}
 }
 
-func (r *UserRepository) Create(user *domain.User) (*domain.User, error) {
+func (r *UserRepository) Create(user domain.User) (*domain.User, error) {
 	ctx := context.Background()
 	dUser, err := r.client.User.Create().SetEmail(user.Email).SetPassword(user.Password).SetID(uuid.New()).SetCreatedAt(time.Now()).SetUpdatedAt(time.Now()).Save(ctx)
 	if err != nil {
@@ -45,7 +45,6 @@ func (r *UserRepository) Create(user *domain.User) (*domain.User, error) {
 		return nil, err
 	}
 	fmt.Println(user.Email, " user created")
-	fmt.Println(dUser, ": duser")
 	
 	return r.toDomainUser(dUser), nil
 }

@@ -39,26 +39,23 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).SendString("Bad Request")
 	}
 
-	// Create credentials DTO for validation
-	creds := dto.UserCredentials{
+	// Validate credentials
+	if err := h.validate.Struct(dto.UserCredentials{
 		Email:    user.Email,
 		Password: user.Password,
-	}
-
-	// Validate credentials
-	if err := h.validate.Struct(creds); err != nil {
+	}); err != nil {
 		log.Println(err.Error())
 		return c.Status(fiber.StatusBadRequest).SendString("Bad Request")
 	}
 
-	dUser, err := h.userService.Register(&user)
+	_, err := h.userService.Register(user)
 	if err != nil {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
 			"error": err.Error(),
 		})
 	}
 
-	token, err := h.authService.Authenticate(creds.Email, creds.Password)
+	token, err := h.authService.Authenticate(user.Email, user.Password)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid credentials",
@@ -66,7 +63,7 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 	}
 
 	// Don't return the password
-	dUser.Password = ""
+	user.Password = "********"
 
 	var domain string
 	if os.Getenv("DEV") == "true" {
@@ -86,7 +83,7 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 	}
 	c.Cookie(&cookie)
 
-	return c.Status(fiber.StatusCreated).JSON(dUser)
+	return c.Status(fiber.StatusCreated).JSON(user)
 }
 
 func (h *AuthHandler) Login(c *fiber.Ctx) error {
