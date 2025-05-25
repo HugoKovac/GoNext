@@ -9,7 +9,7 @@ import (
 )
 
 type Router struct {
-	app *fiber.App
+	app         *fiber.App
 	authHandler *AuthHandler
 	userHandler *UserHandler
 }
@@ -18,7 +18,7 @@ func NewRouter(app *fiber.App, userRepo ports.UserRepository, jwtSecret string) 
 
 	authService := services.NewAuthService(userRepo, jwtSecret)
 	userService := services.NewUserService(userRepo)
-	
+
 	authHandler := NewAuthHandler(authService, userService)
 	userHandler := NewUserHandler(userService)
 
@@ -37,6 +37,3 @@ func (r *Router) SetupProtectedRoutes() {
 	api.Get("/users/me", r.userHandler.GetCurrentUser)
 	api.Get("/users", r.userHandler.GetByEmail)
 }
-
-
-

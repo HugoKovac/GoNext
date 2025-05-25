@@ -21,6 +21,7 @@ func (User) Fields() []ent.Field {
 		field.String("password").NotEmpty(),
 		field.Time("created_at").Default(time.Now),
 		field.Time("updated_at").Default(time.Now),
+		field.Enum("role").Values("admin", "user").Default("user"),
 	}
 }
 

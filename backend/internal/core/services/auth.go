@@ -36,7 +36,7 @@ func (s *authService) Authenticate(username string, password string) (string, er
     }
 
     // Generate JWT token
-    return jwt.GenerateToken(user.Id, s.jwtSecret)
+    return jwt.GenerateToken(user.Id, s.jwtSecret, user.Role)
 }
 
 func (s *authService) ValidateToken(tokenString string) (string, error) {

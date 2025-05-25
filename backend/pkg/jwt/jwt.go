@@ -12,12 +12,14 @@ type JwtClaims struct {
     jwt.RegisteredClaims
 }
 
-func GenerateToken(userID string, secret string) (string, error) {
+func GenerateToken(userID string, secret string, role string) (string, error) {
     claims := JwtClaims{
         UserID: userID,
         RegisteredClaims: jwt.RegisteredClaims{
             ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
             IssuedAt:  jwt.NewNumericDate(time.Now()),
+            Issuer:    "gonext",
+            Subject:   role,
         },
     }
 

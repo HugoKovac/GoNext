@@ -34,6 +34,7 @@ func (r *UserRepository) toDomainUser(entUser *ent.User) *domain.User {
 		Password: entUser.Password,
 		CreatedAt: entUser.CreatedAt,
 		UpdatedAt: entUser.CreatedAt,
+		Role: entUser.Role.String(),
 	}
 }
 
