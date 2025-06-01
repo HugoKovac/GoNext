@@ -10,23 +10,23 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type authService struct {
+type AuthService struct {
     userRepo ports.UserRepository
     jwtSecret string
 }
 
 func NewAuthService(userRepo ports.UserRepository, jwtSecret string) ports.AuthService {
-    return &authService{
+    return &AuthService{
         userRepo: userRepo,
         jwtSecret: jwtSecret,
     }
 }
 
-func (s *authService) Authenticate(username string, password string) (string, error) {
+func (s *AuthService) Authenticate(username string, password string) (string, error) {
     // Get user by email
     user, err := s.userRepo.FindByEmail(username)
     if err != nil {
-        return "", errors.New("User does not exist")
+        return "", errors.New("user does not exist")
     }
     
     // Compare passwords
@@ -39,6 +39,6 @@ func (s *authService) Authenticate(username string, password string) (string, er
     return jwt.GenerateToken(user.Id, s.jwtSecret, user.Role)
 }
 
-func (s *authService) ValidateToken(tokenString string) (string, error) {
+func (s *AuthService) ValidateToken(tokenString string) (string, error) {
     return jwt.ValidateToken(tokenString, s.jwtSecret)
 }

@@ -51,9 +51,11 @@ func (s *UserService) GetByEmail(email string) (*domain.User, error) {
 }
 
 func (s *UserService) Update(user *domain.User) error {
+	//todo: To implement and test
 	return nil
 }
 
 func (s *UserService) Delete(id string) error {
+	//todo: To implement and test
 	return nil
 }
