@@ -20,24 +20,24 @@ func NewUserService(userRepo ports.UserRepository) ports.UserService {
 }
 
 func (s *UserService) Register(user domain.User) (*domain.User, error) {
-    existingUser, _ := s.UserRepository.FindByEmail(user.Email)
-    if existingUser != nil {
-        return nil, errors.New("user with this email already exists")
-    }
+	existingUser, _ := s.UserRepository.FindByEmail(user.Email)
+	if existingUser != nil {
+		return nil, errors.New("user with this email already exists")
+	}
 
-    // Hash password
-    hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
-    if err != nil {
-        return nil, err
-    }
-    user.Password = string(hashedPassword)
+	// Hash password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+	user.Password = string(hashedPassword)
 
-    // Set timestamps
-    now := time.Now()
-    user.CreatedAt = now
-    user.UpdatedAt = now
+	// Set timestamps
+	now := time.Now()
+	user.CreatedAt = now
+	user.UpdatedAt = now
 
-    return s.UserRepository.Create(user)
+	return s.UserRepository.Create(user)
 }
 
 func (s *UserService) GetById(id string) (*domain.User, error) {
