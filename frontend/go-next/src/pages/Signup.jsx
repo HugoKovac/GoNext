@@ -97,7 +97,7 @@ function SignUp() {
                 name="password"
                 placeholder="Password"
                 minLength="12"
-                pattern='^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?\":{}|<>])[A-Za-z\d!@#$%^&*(),.?\":{}|<>]{12,}$'
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{12,}$"
                 title="Password must be at least 12 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
