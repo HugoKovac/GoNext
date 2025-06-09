@@ -1,6 +1,0 @@
-2025/05/13 19:49:06 [error] 190#190: *23 backend_prod could not be resolved (3: Host not found), client: 192.168.65.1, server: api.gonext.com, request: "POST /api/auth/register HTTP/1.1", host: "api.gonext.com"
-2025/05/13 19:49:22 [error] 186#186: *25 backend_prod could not be resolved (3: Host not found), client: 192.168.65.1, server: api.gonext.com, request: "POST /api/auth/register HTTP/1.1", host: "api.gonext.com"
-2025/05/21 10:31:29 [error] 180#180: *1 frontend_prod could not be resolved (3: Host not found), client: 192.168.65.1, server: gonext.com, request: "GET /signup HTTP/1.1", host: "gonext.com", referrer: "http://gonext.com/signin"
-2025/05/21 10:31:29 [error] 180#180: *1 frontend_prod could not be resolved (3: Host not found), client: 192.168.65.1, server: gonext.com, request: "GET /favicon.ico HTTP/1.1", host: "gonext.com", referrer: "http://gonext.com/signup"
-2025/05/21 10:31:31 [error] 180#180: *1 frontend_prod could not be resolved (3: Host not found), client: 192.168.65.1, server: gonext.com, request: "GET /signup HTTP/1.1", host: "gonext.com"
-2025/05/21 10:31:36 [error] 180#180: *1 frontend_prod could not be resolved (3: Host not found), client: 192.168.65.1, server: gonext.com, request: "GET /signup HTTP/1.1", host: "gonext.com"

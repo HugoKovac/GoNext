@@ -6,6 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig(({ mode }) => {
   const isDev = mode === "development";
   return {
+    base: '/',
     plugins: [react(), tailwindcss()],
     server: {
       port: 3000,
@@ -14,5 +15,8 @@ export default defineConfig(({ mode }) => {
         }
       : undefined,
     },
+    build: {
+    outDir: "dist",
+  },
   };
 });
