@@ -7,6 +7,9 @@ variable "bucket_name" {
 variable "static_website_build_dir" {
   description = "local path for frontend static website"
   type = string
-  default = "../go-next/dist"
+  default = "../../frontend/go-next/dist"
 }
 
+variable "public_key" {
+  description = "Public key for SSH access"
+}
