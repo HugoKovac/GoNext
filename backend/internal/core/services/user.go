@@ -4,7 +4,6 @@ import (
 	"GoNext/base/internal/core/domain"
 	"GoNext/base/internal/core/ports"
 	"errors"
-	"log"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
