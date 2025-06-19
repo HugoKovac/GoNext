@@ -1,55 +1,3 @@
-# Key pair for EC2 access
-resource "aws_key_pair" "deployer" {
-  key_name   = "deployer-key"
-  public_key = var.public_key
-}
-
-
-# Security group allowing SSH and application access
-resource "aws_security_group" "allow_access" {
-  name_prefix = "app-server-sg"
-  
-  ingress {
-    description = "SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  
-  ingress {
-    description = "Application port"
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "GoNextBackend-SG"
-  }
-}
-
-# EC2 instance
-resource "aws_instance" "app_server" {
-  ami           = "ami-04a20f4b19f8a7a88"  # Amazon Linux 2
-  instance_type = "t2.micro"
-  key_name      = aws_key_pair.deployer.key_name
-  
-  vpc_security_group_ids = [aws_security_group.allow_access.id]
-  
-  tags = {
-    Name = "GoNextBackend"
-  }
-}
-
 # Build the Go binary
 resource "null_resource" "build_binary" {
   # Trigger rebuild when source code changes
@@ -94,7 +42,7 @@ resource "null_resource" "deploy_binary" {
 
   # Copy systemd service file
   provisioner "file" {
-    content = templatefile("${path.module}/service.tpl", {
+    content = templatefile("${path.module}/template/service.tpl", {
       binary_name = var.binary_name
       description = var.service_description
       user        = var.service_user
