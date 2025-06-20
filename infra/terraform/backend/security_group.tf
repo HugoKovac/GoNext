@@ -29,3 +29,18 @@ resource "aws_security_group" "allow_access" {
     Name = "GoNextBackend-SG"
   }
 }
+
+resource "aws_security_group" "db_sg" {
+  name_prefix = "db-sg-"
+
+  ingress {
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [aws_security_group.allow_access.id]
+  }
+  
+  tags = {
+    Name = "database-security-group"
+  }
+}

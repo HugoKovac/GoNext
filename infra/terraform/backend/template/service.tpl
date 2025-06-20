@@ -11,15 +11,11 @@ User=${user}
 ExecStart=/usr/local/bin/${binary_name}
 WorkingDirectory=/home/${user}
 
-# Environment variables (uncomment and modify as needed)
-# Environment=PORT=${port}
-# Environment=LOG_LEVEL=info
-# Environment=DATABASE_URL=your_database_url
+EnvironmentFile=${env_file}
 
 # Security settings
 NoNewPrivileges=yes
 ProtectSystem=strict
-ProtectHome=yes
 ReadWritePaths=/tmp /var/log
 PrivateTmp=yes
 

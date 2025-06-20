@@ -8,13 +8,10 @@ services:
     ports:
       - 8080:8080
     environment:
-      - DB_HOST=postgres_dev
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - DB_NAME=gonext_dev
       - JWT_SECRET=debugPass
       - DEV=true
+    env_file:
+      - .env
     depends_on:
       - postgres_dev
     networks:
