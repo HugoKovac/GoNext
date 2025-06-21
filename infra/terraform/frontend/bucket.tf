@@ -29,31 +29,22 @@ resource "aws_s3_bucket_policy" "p" {
   depends_on = [ aws_s3_bucket_public_access_block.acl ]
 }
 
-resource "aws_s3_object" "static_site_upload_object" {
-  for_each = fileset(var.static_website_build_dir, "**")
-  bucket = aws_s3_bucket.b.id
-  key = each.value
-  source = "${var.static_website_build_dir}/${each.value}"
-  etag = filemd5("${var.static_website_build_dir}/${each.value}")
-   content_type = lookup({
-    ".html" = "text/html"
-    ".css"  = "text/css"
-    ".js"   = "application/javascript"
-    ".json" = "application/json"
-    ".png"  = "image/png"
-    ".jpg"  = "image/jpeg"
-    ".jpeg" = "image/jpeg"
-    ".gif"  = "image/gif"
-    ".svg"  = "image/svg+xml"
-    ".ico"  = "image/x-icon"
-    ".txt"  = "text/plain"
-    ".pdf"  = "application/pdf"
-    ".woff" = "font/woff"
-    ".woff2" = "font/woff2"
-    ".ttf"  = "font/ttf"
-    ".otf"  = "font/otf"
-  }, ".${reverse(split(".", each.value))[0]}", "application/octet-stream")
-  depends_on = [ aws_s3_bucket.b ]
+# build + upload
+resource "null_resource" "build_and_sync" {
+  provisioner "local-exec" {
+    command = <<EOT
+      cd ../../frontend/go-next
+      npm ci
+      npm run build
+      aws s3 sync dist/ s3://${aws_s3_bucket.b.bucket}/ --delete
+    EOT
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+
+  depends_on = [ aws_s3_bucket_policy.p ]
 }
 
 resource "aws_s3_bucket_website_configuration" "website" {
@@ -67,6 +58,6 @@ resource "aws_s3_bucket_website_configuration" "website" {
     key = "index.html"
   }
 
-  depends_on = [ aws_s3_object.static_site_upload_object ]
+  depends_on = [ null_resource.build_and_sync ]
 }
 
