@@ -51,6 +51,7 @@ resource "null_resource" "deploy_binary" {
       username      = aws_db_instance.psql_instance.username
       password  = aws_db_instance.psql_instance.password
       db_name      = aws_db_instance.psql_instance.db_name
+      allow_origins = var.frontend_endpoint
     })
     destination = "/tmp/.prodenv"
     connection {
@@ -97,7 +98,6 @@ resource "null_resource" "deploy_binary" {
       "sudo systemctl daemon-reload",
       "sudo systemctl enable ${var.binary_name}",
       "sudo systemctl start ${var.binary_name}",
-      "sudo systemctl status ${var.binary_name}"
     ]
 
     connection {

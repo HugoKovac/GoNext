@@ -55,3 +55,7 @@ variable "build_env" {
     CGO_ENABLED = "0"
   }
 }
+
+variable "frontend_endpoint" {
+  type = string
+}

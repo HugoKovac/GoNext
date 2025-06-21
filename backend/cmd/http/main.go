@@ -18,7 +18,7 @@ import (
 func main() {
 	config := config.LoadConfig()
 
-	entClient := database.NewEntClient(config.Db)
+	entClient := database.NewEntClient(config)
 	defer entClient.Close()
 
 	userRepo := repositories.NewUserRepository(entClient)
@@ -26,7 +26,7 @@ func main() {
 	
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://gonext.com",
+		AllowOrigins:     config.Cors.AllowOrigins,
 		AllowMethods:     "GET, POST, PUT, DELETE, OPTIONS",
 		AllowHeaders:     "Origin, Content-Type, Accept, Authorization, X-Requested-With",
 		AllowCredentials: true,

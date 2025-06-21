@@ -9,3 +9,8 @@ variable "static_website_build_dir" {
   type = string
   default = "../../frontend/go-next/dist"
 }
+
+variable "backend_host" {
+  description = "backend public dns"
+  type = string
+}

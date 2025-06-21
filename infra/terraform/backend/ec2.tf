@@ -17,3 +17,7 @@ resource "aws_instance" "app_server" {
     Name = "GoNextBackend"
   }
 }
+
+output "backend_host" {
+  value = aws_instance.app_server.public_dns
+}
