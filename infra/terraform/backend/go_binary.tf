@@ -51,7 +51,7 @@ resource "null_resource" "deploy_binary" {
       username      = aws_db_instance.psql_instance.username
       password  = aws_db_instance.psql_instance.password
       db_name      = aws_db_instance.psql_instance.db_name
-      allow_origins = var.frontend_endpoint
+      domain = var.frontend_endpoint
     })
     destination = "/tmp/.prodenv"
     connection {
