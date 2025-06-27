@@ -10,6 +10,16 @@ variable "static_website_build_dir" {
   default = "../../frontend/go-next/dist"
 }
 
+variable "domain" {
+  description = "Domain for the application"
+  type = string
+}
+
 variable "backend_domain" {
   type = string
+}
+
+variable "frontend_domain" {
+  description = "Frontend domain name for CloudFront distribution"
+  type        = string
 }

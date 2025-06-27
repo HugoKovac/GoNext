@@ -10,6 +10,11 @@ variable "public_key" {
   type = string
 }
 
+
+variable "domain" {
+  type = string
+}
+
 variable "backend_domain" {
   type = string
 }

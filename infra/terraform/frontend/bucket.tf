@@ -15,18 +15,24 @@ resource "aws_s3_bucket_policy" "p" {
   bucket = aws_s3_bucket.b.id
   policy = jsonencode({
     Version = "2012-10-17"
-    Id      = "MYBUCKETPOLICY"
     Statement = [
       {
-        Sid       = "Statement1"
+        Sid       = "AllowCloudFrontServicePrincipalReadOnly"
         Effect    = "Allow"
-        Principal = "*"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
         Action    = "s3:GetObject"
         Resource  = "${aws_s3_bucket.b.arn}/*"
+        Condition = {
+          StringEquals = {
+            "AWS:SourceArn" = aws_cloudfront_distribution.frontend.arn
+          }
+        }
       }
     ]
   })
-  depends_on = [aws_s3_bucket_public_access_block.acl]
+  depends_on = [aws_s3_bucket_public_access_block.acl, aws_cloudfront_distribution.frontend]
 }
 
 resource "local_file" "env_production" {
