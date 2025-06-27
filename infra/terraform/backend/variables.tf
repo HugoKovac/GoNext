@@ -59,3 +59,11 @@ variable "build_env" {
 variable "frontend_endpoint" {
   type = string
 }
+
+variable "backend_domain" {
+  type = string
+}
+
+variable "frontend_domain" {
+  type = string
+}

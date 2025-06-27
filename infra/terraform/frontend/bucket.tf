@@ -31,7 +31,7 @@ resource "aws_s3_bucket_policy" "p" {
 
 resource "local_file" "env_production" {
   content  = <<EOT
-VITE_API_URL=http://${var.backend_host}:8080
+VITE_API_URL=https://${var.backend_domain}
 EOT
   filename = "../../frontend/go-next/.env.production"
 }

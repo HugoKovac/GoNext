@@ -5,3 +5,4 @@ DB_PASSWORD=${password}
 DB_NAME=${db_name}
 DOMAIN=${domain}
 MODE=prod
+ALLOW_ORIGINS=https://${allow_origins}
