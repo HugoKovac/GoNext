@@ -13,13 +13,6 @@ resource "aws_acm_certificate" "frontend" {
   }
 }
 
-# print to user instructions for DNS validation if not validated
-output "CNAME_instructions" {
-  description = "Register the following CNAME in your DNS provider to validate the ACM certificate:"
-  value       = "Name: ${aws_acm_certificate.frontend.domain_validation_options[0].resource_record_name}, Value: ${aws_acm_certificate.frontend.domain_validation_options[0].resource_record_value}"
-}
-
-
 # CloudFront Origin Access Control for S3
 resource "aws_cloudfront_origin_access_control" "frontend" {
   name                              = "frontend-oac"
@@ -68,6 +61,17 @@ resource "aws_cloudfront_distribution" "frontend" {
     geo_restriction {
       restriction_type = "none"
     }
+  }
+
+  custom_error_response {
+    error_code            = 404
+    response_code         = 200
+    response_page_path    = "/index.html"
+  }
+  custom_error_response {
+    error_code            = 403
+    response_code         = 200
+    response_page_path    = "/index.html"
   }
 
   depends_on = [aws_acm_certificate.frontend]
