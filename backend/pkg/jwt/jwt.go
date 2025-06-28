@@ -28,6 +28,10 @@ func GenerateToken(userID string, secret string, role string) (string, error) {
 }
 
 func ValidateToken(tokenString string, secret string) (string, error) {
+    if tokenString == "" {
+        return "", jwt.ErrTokenMalformed
+    }
+    tokenString = tokenString[len("Bearer "):]
     token, err := jwt.ParseWithClaims(tokenString, &JwtClaims{}, func(token *jwt.Token) (interface{}, error) {
         return []byte(secret), nil
     })

@@ -1,13 +1,25 @@
 package config
 
-import "os"
+import (
+	"os"
+)
+
+type EnvConfig struct {
+	Mode           string
+	FrontendDomain string
+	Domain         string
+}
+
+type CorsConfig struct {
+	AllowOrigins string
+}
 
 type DbConfig struct {
-	Host string
-	Port string
-	User string
+	Host     string
+	Port     string
+	User     string
 	Password string
-	DbName string
+	DbName   string
 }
 
 type JwtConfig struct {
@@ -15,8 +27,10 @@ type JwtConfig struct {
 }
 
 type Config struct {
-	Db DbConfig
-	Jwt JwtConfig
+	Db   DbConfig
+	Jwt  JwtConfig
+	Env  EnvConfig
+	Cors CorsConfig
 }
 
 func LoadConfig() *Config {
@@ -25,6 +39,13 @@ func LoadConfig() *Config {
 	dbUser := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
+	mode := os.Getenv("MODE")
+	frontendDomain := os.Getenv("FRONTEND_DOMAIN")
+	domain := os.Getenv("DOMAIN")
+	if mode == "" {
+		mode = "dev"
+	}
+	allow_origins := os.Getenv("ALLOW_ORIGINS")
 
 	jwtSecret := os.Getenv("JWT_SECRET")
 	if jwtSecret == "" {
@@ -33,14 +54,22 @@ func LoadConfig() *Config {
 
 	return &Config{
 		Db: DbConfig{
-			Host: dbHost,
-			Port: dbPort,
-			User: dbUser,
+			Host:     dbHost,
+			Port:     dbPort,
+			User:     dbUser,
 			Password: dbPassword,
-			DbName: dbName,
+			DbName:   dbName,
 		},
 		Jwt: JwtConfig{
 			Secret: jwtSecret,
+		},
+		Env: EnvConfig{
+			Mode:           mode,
+			FrontendDomain: frontendDomain,
+			Domain:         domain,
+		},
+		Cors: CorsConfig{
+			AllowOrigins: allow_origins,
 		},
 	}
 }

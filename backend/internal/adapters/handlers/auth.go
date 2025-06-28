@@ -5,6 +5,7 @@ import (
 	"GoNext/base/internal/adapters/dto"
 	"GoNext/base/internal/core/domain"
 	"GoNext/base/internal/core/ports"
+	"GoNext/base/pkg/config"
 	customvalidator "GoNext/base/pkg/validator"
 	"log"
 	"os"
@@ -19,9 +20,10 @@ type AuthHandler struct {
 	authService ports.AuthService
 	userService ports.UserService
 	validate    *validator.Validate
+	config      *config.Config
 }
 
-func NewAuthHandler(authService ports.AuthService, userService ports.UserService) *AuthHandler {
+func NewAuthHandler(authService ports.AuthService, userService ports.UserService, config *config.Config) *AuthHandler {
 	v := validator.New()
 	customvalidator.RegisterCustomValidators(v)
 
@@ -29,6 +31,7 @@ func NewAuthHandler(authService ports.AuthService, userService ports.UserService
 		authService: authService,
 		userService: userService,
 		validate:    v,
+		config:      config,
 	}
 }
 
@@ -69,15 +72,15 @@ func (h *AuthHandler) Register(c *fiber.Ctx) error {
 	if os.Getenv("DEV") == "true" {
 		domain = ".localhost"
 	} else {
-		domain = ".gonext.com"
+		domain = "." + h.config.Env.Domain
 	}
 	cookie := fiber.Cookie{
 		Name:     "token",
-		Value:    token,
+		Value:    "Bearer " + token,
 		Domain:   domain,
 		Secure:   true,
 		HTTPOnly: true,
-		SameSite: "Lax",
+		SameSite: "None", // <-- Change this
 		Expires:  time.Now().Add(time.Hour * 24),
 		Path:     "/",
 	}
@@ -95,7 +98,7 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 
 	if err := h.validate.Struct(creds); err != nil {
 		log.Println(err.Error())
-		return c.Status(fiber.StatusBadRequest).SendString("Validation Error")
+		return c.Status(fiber.StatusBadRequest).SendString("Bad Request")
 	}
 
 	token, err := h.authService.Authenticate(creds.Email, creds.Password)
@@ -108,15 +111,15 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 	if os.Getenv("DEV") == "true" {
 		domain = ".localhost"
 	} else {
-		domain = ".gonext.com"
+		domain = "." + h.config.Env.Domain
 	}
 	cookie := fiber.Cookie{
 		Name:     "token",
-		Value:    token,
+		Value:    "Bearer " + token,
 		Domain:   domain,
 		Secure:   true,
 		HTTPOnly: true,
-		SameSite: "Lax",
+		SameSite: "None", // <-- Change this
 		Expires:  time.Now().Add(time.Hour * 24),
 		Path:     "/",
 	}
@@ -151,7 +154,7 @@ func (h *AuthHandler) Logout(c *fiber.Ctx) error {
 	if os.Getenv("DEV") == "true" {
 		domain = ".localhost"
 	} else {
-		domain = ".gonext.com"
+		domain = "." + h.config.Env.Domain
 	}
 	cookie := fiber.Cookie{
 		Name:     "token",

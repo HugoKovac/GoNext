@@ -4,6 +4,7 @@ import (
 	"GoNext/base/internal/core/ports"
 	"GoNext/base/internal/core/services"
 	"GoNext/base/internal/middleware"
+	"GoNext/base/pkg/config"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -14,12 +15,12 @@ type Router struct {
 	userHandler *UserHandler
 }
 
-func NewRouter(app *fiber.App, userRepo ports.UserRepository, jwtSecret string) *Router {
+func NewRouter(app *fiber.App, userRepo ports.UserRepository, config *config.Config) *Router {
 
-	authService := services.NewAuthService(userRepo, jwtSecret)
+	authService := services.NewAuthService(userRepo, config.Jwt.Secret)
 	userService := services.NewUserService(userRepo)
 
-	authHandler := NewAuthHandler(authService, userService)
+	authHandler := NewAuthHandler(authService, userService, config)
 	userHandler := NewUserHandler(userService)
 
 	return &Router{app: app, authHandler: authHandler, userHandler: userHandler}

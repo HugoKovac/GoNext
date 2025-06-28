@@ -13,9 +13,13 @@ import (
 )
 
 // NewEntClient creates a new Ent client connected to PostgreSQL
-func NewEntClient(config config.DbConfig) *ent.Client {
-    dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-        config.Host, config.Port, config.User, config.Password, config.DbName)
+func NewEntClient(config *config.Config) *ent.Client {
+    sslmode := "require"
+    if config.Env.Mode == "dev" {
+        sslmode = "disable"
+    }
+    dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s", // disable ssl for dev
+        config.Db.Host, config.Db.Port, config.Db.User, config.Db.Password, config.Db.DbName, sslmode)
     
     client, err := ent.Open(dialect.Postgres, dsn)
     if err != nil {
