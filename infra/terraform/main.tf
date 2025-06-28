@@ -18,6 +18,7 @@ module "backend" {
   frontend_endpoint = module.frontend.frontend_endpoint
   backend_domain = var.backend_domain
   frontend_domain = var.frontend_domain
+  domain = var.domain
   
 }
 

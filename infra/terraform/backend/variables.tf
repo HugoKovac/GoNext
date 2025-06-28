@@ -56,6 +56,10 @@ variable "build_env" {
   }
 }
 
+variable "domain" {
+  type        = string
+}
+
 variable "frontend_endpoint" {
   type = string
 }

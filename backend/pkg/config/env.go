@@ -1,9 +1,13 @@
 package config
 
-import "os"
+import (
+	"os"
+)
 
 type EnvConfig struct {
-	Mode string
+	Mode           string
+	FrontendDomain string
+	Domain         string
 }
 
 type CorsConfig struct {
@@ -11,11 +15,11 @@ type CorsConfig struct {
 }
 
 type DbConfig struct {
-	Host string
-	Port string
-	User string
+	Host     string
+	Port     string
+	User     string
 	Password string
-	DbName string
+	DbName   string
 }
 
 type JwtConfig struct {
@@ -23,9 +27,9 @@ type JwtConfig struct {
 }
 
 type Config struct {
-	Db DbConfig
-	Jwt JwtConfig
-	Env EnvConfig
+	Db   DbConfig
+	Jwt  JwtConfig
+	Env  EnvConfig
 	Cors CorsConfig
 }
 
@@ -36,6 +40,8 @@ func LoadConfig() *Config {
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
 	mode := os.Getenv("MODE")
+	frontendDomain := os.Getenv("FRONTEND_DOMAIN")
+	domain := os.Getenv("DOMAIN")
 	if mode == "" {
 		mode = "dev"
 	}
@@ -48,17 +54,19 @@ func LoadConfig() *Config {
 
 	return &Config{
 		Db: DbConfig{
-			Host: dbHost,
-			Port: dbPort,
-			User: dbUser,
+			Host:     dbHost,
+			Port:     dbPort,
+			User:     dbUser,
 			Password: dbPassword,
-			DbName: dbName,
+			DbName:   dbName,
 		},
 		Jwt: JwtConfig{
 			Secret: jwtSecret,
 		},
 		Env: EnvConfig{
-			Mode: mode,
+			Mode:           mode,
+			FrontendDomain: frontendDomain,
+			Domain:         domain,
 		},
 		Cors: CorsConfig{
 			AllowOrigins: allow_origins,

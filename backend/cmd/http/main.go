@@ -32,7 +32,7 @@ func main() {
 		AllowCredentials: true,
 	}))
 	
-	router := handlers.NewRouter(app, userRepo, config.Jwt.Secret)
+	router := handlers.NewRouter(app, userRepo, config)
 	router.SetupPublicRoutes()
 	router.SetupProtectedRoutes()
 
