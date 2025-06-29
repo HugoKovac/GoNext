@@ -46,7 +46,7 @@ GoNext/
     - Ensure you have AWS CLI installed and configured with your credentials.
     - Set up your AWS environment variables or use a credentials file.
 2. **Edit Terraform variables:**
-   - Update `infra/terraform/variables.tfvars` with your desired values.
+   - Copy `infra/terraform/variables.tfvars.example` to `infra/terraform/variables.tfvars` with your desired values.
 3. **Provision infrastructure:**
    ```sh
    cd infra/terraform
@@ -55,6 +55,9 @@ GoNext/
    ```
 4. **Build and deploy the backend and frontend:**
    - Certificate: Ensure you have an SSL certificate set up in AWS Certificate Manager (For external registrar domain).
+     - Add certs files to `infra/terraform/certs`.
+     - Verify domain with CNAME records.
+     - Register CNAME records in your domain registrar for cloudfront distribution and ALB public DNS.
    - Backend: Build Go binary and upload to EC2 and run the service.
    - Frontend: Build React app and upload to S3 bucket for CloudFront distribution.
 

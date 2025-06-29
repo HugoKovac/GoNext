@@ -1,0 +1,5 @@
+public_key = "<ssh public key>"
+aws_region = "eu-west-3"
+domain = "domain.com"
+backend_domain="test-api.domain.com"
+frontend_domain="test.domain.com"
