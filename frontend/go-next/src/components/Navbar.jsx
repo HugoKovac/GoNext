@@ -32,9 +32,11 @@ function Navbar() {
             <li>
               <a>Homepage</a>
             </li>
-            <li>
-              <a>Portfolio</a>
-            </li>
+            {user && (
+              <li>
+                <a href="/profile">Profile</a>
+              </li>
+            )}
             <li>
               <a>About</a>
             </li>

@@ -1,7 +1,7 @@
-import { Navigate, Outlet } from "react-router";
+import { Navigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
 
-const ProtectedRoute = () => {
+const ProtectedRoute = ({ children }) => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
@@ -12,7 +12,7 @@ const ProtectedRoute = () => {
     return <Navigate to="/signin" replace />;
   }
 
-  return <Outlet />;
+  return children;
 };
 
 export default ProtectedRoute;

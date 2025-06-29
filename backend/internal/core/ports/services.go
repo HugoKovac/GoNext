@@ -6,7 +6,7 @@ type UserService interface {
 	Register(user domain.User) (*domain.User, error)
 	GetById(id string) (*domain.User, error)
 	GetByEmail(email string) (*domain.User, error)
-	Update(user *domain.User) error
+	Update(userID string, email string, oldPassword string, newPassword string) (domain.User, error)
 	Delete(id string) error
 }
 

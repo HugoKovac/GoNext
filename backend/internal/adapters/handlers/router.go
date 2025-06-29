@@ -36,5 +36,6 @@ func (r *Router) SetupPublicRoutes() {
 func (r *Router) SetupProtectedRoutes() {
 	api := r.app.Group("/api", middleware.JWTAuthentication(r.authHandler.authService))
 	api.Get("/users/me", r.userHandler.GetCurrentUser)
+	api.Put("/users/me", r.userHandler.UpdateCurrentUser)
 	api.Get("/users", r.userHandler.GetByEmail)
 }

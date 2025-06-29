@@ -137,3 +137,5 @@ func TestGetByEmailUserDoesntExists(t *testing.T){
 	assert.Nil(t, rtnUser)
 	assert.NotNil(t, err)
 }
+
+// todo: add test for Update

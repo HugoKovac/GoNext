@@ -29,12 +29,12 @@ func (r *UserRepository) toDomainUser(entUser *ent.User) *domain.User {
 	}
 
 	return &domain.User{
-		Id: entUser.ID.String(),
-		Email: entUser.Email,
-		Password: entUser.Password,
+		Id:        entUser.ID.String(),
+		Email:     entUser.Email,
+		Password:  entUser.Password,
 		CreatedAt: entUser.CreatedAt,
 		UpdatedAt: entUser.CreatedAt,
-		Role: entUser.Role.String(),
+		Role:      entUser.Role.String(),
 	}
 }
 
@@ -46,7 +46,7 @@ func (r *UserRepository) Create(user domain.User) (*domain.User, error) {
 		return nil, err
 	}
 	fmt.Println(user.Email, " user created")
-	
+
 	return r.toDomainUser(dUser), nil
 }
 
@@ -68,9 +68,38 @@ func (r *UserRepository) FindByEmail(email string) (*domain.User, error) {
 }
 
 func (r *UserRepository) Update(user *domain.User) error {
+	ctx := context.Background()
+	uuid, err := uuid.Parse(user.Id)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	_, err = r.client.User.UpdateOneID(uuid).
+		SetEmail(user.Email).
+		SetPassword(user.Password).
+		SetUpdatedAt(time.Now()).
+		Save(ctx)
+
+	if err != nil {
+		log.Println("Updating User: ", err)
+		return err
+	}
 	return nil
 }
 
 func (r *UserRepository) Delete(id string) error {
+	ctx := context.Background()
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	err = r.client.User.DeleteOneID(uuid).Exec(ctx)
+	if err != nil {
+		log.Println("Deleting User: ", err)
+		return err
+	}
 	return nil
 }

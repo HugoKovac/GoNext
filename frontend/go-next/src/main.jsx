@@ -5,11 +5,11 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import Login from "./pages/Login";
 import SignUp from "./pages/Signup";
-import ProtectedHome from "./pages/ProtectedHome";
 import NotFound from "./pages/NotFound";
 import "./index.css";
-import App from "./App.jsx";
 import Navbar from "./components/Navbar";
+import Profile from "./pages/Profile";
+import HomeSwitch from "./pages/HomeSwitch";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -17,12 +17,17 @@ createRoot(document.getElementById("root")).render(
       <AuthProvider>
         <Navbar />
         <Routes>
-          <Route path="/" element={<App />} />
+          <Route path="/" element={<HomeSwitch />} />
           <Route path="/signin" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/protected" element={<ProtectedRoute />}>
-            <Route path="/protected/home" element={<ProtectedHome />} />
-          </Route>
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>

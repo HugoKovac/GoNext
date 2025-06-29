@@ -39,6 +39,6 @@ func (s *AuthService) Authenticate(username string, password string) (string, er
     return jwt.GenerateToken(user.Id, s.jwtSecret, user.Role)
 }
 
-func (s *AuthService) ValidateToken(tokenString string) (string, error) {
+func (s *AuthService) ValidateToken(tokenString  string) (string, error) {
     return jwt.ValidateToken(tokenString, s.jwtSecret)
 }
