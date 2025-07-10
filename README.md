@@ -68,6 +68,3 @@ GoNext/
 - Modern React UI with protected routes
 - Infrastructure as code (Terraform)
 - Ready for CI/CD integration
-
-## License
-MIT
